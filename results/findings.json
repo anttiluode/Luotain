@@ -1,0 +1,122 @@
+{
+ "old_classes_with_most_new_members": [
+  {
+   "class_rep": "E41",
+   "law": "x ◇ x = y ◇ z",
+   "old_members": 419,
+   "new_members": 5103
+  },
+  {
+   "class_rep": "E13",
+   "law": "x = y ◇ (x ◇ x)",
+   "old_members": 112,
+   "new_members": 1181
+  },
+  {
+   "class_rep": "E24",
+   "law": "x = (x ◇ x) ◇ y",
+   "old_members": 112,
+   "new_members": 1181
+  },
+  {
+   "class_rep": "E62",
+   "law": "x = y ◇ (x ◇ (x ◇ x))",
+   "old_members": 76,
+   "new_members": 891
+  },
+  {
+   "class_rep": "E256",
+   "law": "x = ((x ◇ x) ◇ x) ◇ y",
+   "old_members": 76,
+   "new_members": 890
+  },
+  {
+   "class_rep": "E4",
+   "law": "x = x ◇ y",
+   "old_members": 71,
+   "new_members": 751
+  }
+ ],
+ "new_class_group_sizes": {
+  "1": 7101,
+  "2": 890,
+  "3": 290,
+  "4": 222,
+  "5": 120,
+  "6": 95,
+  "7": 48,
+  "8": 48,
+  "9": 24,
+  "10": 28
+ },
+ "largest_new_group": 234,
+ "new_laws_with_fewest_variables": [
+  {
+   "equation": 4695,
+   "law": "x = x ◇ (x ◇ (x ◇ (x ◇ (x ◇ x))))",
+   "status": "new"
+  },
+  {
+   "equation": 5572,
+   "law": "x = x ◇ (x ◇ (x ◇ ((x ◇ x) ◇ x)))",
+   "status": "new"
+  },
+  {
+   "equation": 6449,
+   "law": "x = x ◇ (x ◇ ((x ◇ x) ◇ (x ◇ x)))",
+   "status": "new"
+  },
+  {
+   "equation": 7326,
+   "law": "x = x ◇ (x ◇ ((x ◇ (x ◇ x)) ◇ x))",
+   "status": "new"
+  },
+  {
+   "equation": 8203,
+   "law": "x = x ◇ (x ◇ (((x ◇ x) ◇ x) ◇ x))",
+   "status": "new"
+  },
+  {
+   "equation": 9080,
+   "law": "x = x ◇ ((x ◇ x) ◇ (x ◇ (x ◇ x)))",
+   "status": "new"
+  },
+  {
+   "equation": 9957,
+   "law": "x = x ◇ ((x ◇ x) ◇ ((x ◇ x) ◇ x))",
+   "status": "new"
+  },
+  {
+   "equation": 10834,
+   "law": "x = x ◇ ((x ◇ (x ◇ x)) ◇ (x ◇ x))",
+   "status": "new"
+  }
+ ],
+ "calibration_residue_most_frequent_source_laws": [
+  {
+   "equation": 1480,
+   "law": "x = (y ◇ x) ◇ (x ◇ (x ◇ z))",
+   "residue_edges_from_it": 4688
+  },
+  {
+   "equation": 1486,
+   "law": "x = (y ◇ x) ◇ (x ◇ (z ◇ z))",
+   "residue_edges_from_it": 4688
+  },
+  {
+   "equation": 2089,
+   "law": "x = ((y ◇ x) ◇ x) ◇ (x ◇ z)",
+   "residue_edges_from_it": 4688
+  },
+  {
+   "equation": 2126,
+   "law": "x = ((y ◇ y) ◇ x) ◇ (x ◇ z)",
+   "residue_edges_from_it": 4688
+  },
+  {
+   "equation": 168,
+   "law": "x = (y ◇ x) ◇ (x ◇ z)",
+   "residue_edges_from_it": 4648
+  }
+ ]
+}

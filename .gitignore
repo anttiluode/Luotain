@@ -1,0 +1,5 @@
+cache/
+tools/vampire
+lean/.lake/
+__pycache__/
+*.pyc

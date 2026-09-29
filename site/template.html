@@ -1,0 +1,365 @@
+<title>Luotain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: a hydrographic survey sheet. The chart is the hero; soundings (counts) and the
+   law inspector sit in a rail beside it, stacking under it on phones. */
+:root {
+  --paper: #edf2f5;
+  --sheet: #f7fafb;
+  --ink: #102536;
+  --muted: #56697a;
+  --rule: rgba(16, 37, 54, 0.14);
+  --old: #2c6c9c;
+  --new: #0d8a73;
+  --collapse: #6a4fa3;
+  --residue: #c9731e;
+  --edge: rgba(44, 108, 156, 0.16);
+  --focus: #0d8a73;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #06121b; --sheet: #0a1a26; --ink: #d6e5ee; --muted: #8aa3b4;
+    --rule: rgba(214, 229, 238, 0.13); --old: #5ea9df; --new: #3fcfb2;
+    --collapse: #a88be8; --residue: #f0a14a; --edge: rgba(94, 169, 223, 0.17); --focus: #3fcfb2;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #06121b; --sheet: #0a1a26; --ink: #d6e5ee; --muted: #8aa3b4;
+  --rule: rgba(214, 229, 238, 0.13); --old: #5ea9df; --new: #3fcfb2;
+  --collapse: #a88be8; --residue: #f0a14a; --edge: rgba(94, 169, 223, 0.17); --focus: #3fcfb2;
+  color-scheme: dark;
+}
+html, body { background: var(--paper); color: var(--ink); }
+body { font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 56px; padding-inline: 20px; display: grid; gap: 28px; }
+header { display: grid; gap: 8px; max-width: 70ch; }
+.eyebrow { font-family: var(--display); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; font-size: 13px; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 7vw, 72px); line-height: 0.95; margin: 0; letter-spacing: 0.01em; text-wrap: balance; }
+.lede { margin: 0; font-size: 18px; color: var(--ink); }
+.lede em { font-style: italic; }
+.survey { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .survey { grid-template-columns: minmax(0, 1fr); } }
+.chart { background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; position: relative; min-width: 0; }
+.chart canvas { display: block; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; cursor: crosshair; }
+.chart .corner { position: absolute; left: 12px; top: 10px; font-family: var(--mono); font-size: 11px; color: var(--muted); pointer-events: none; }
+.phases .scale { margin-left: auto; align-self: center; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.phases { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; border-top: 1px solid var(--rule); }
+.phases button { font-family: var(--display); font-size: 15px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; padding: 7px 12px; cursor: pointer; }
+.phases button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.phases button:focus-visible, .chips button:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.rail { display: grid; gap: 16px; min-width: 0; }
+.panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0; }
+.panel h2 { font-family: var(--display); font-size: 15px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin: 0; color: var(--muted); }
+.big { font-family: var(--display); font-weight: 600; font-size: 44px; line-height: 1; font-variant-numeric: tabular-nums; }
+.big small { font-size: 18px; color: var(--muted); font-weight: 500; letter-spacing: 0.04em; }
+.note { font-size: 14px; color: var(--muted); margin: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips button { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 12px; color: var(--ink);
+  background: transparent; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 9px 3px 7px; cursor: pointer; }
+.chips button[aria-pressed="false"] { opacity: 0.45; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+.rows { display: grid; gap: 6px; font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; }
+.row span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.inspect { font-family: var(--mono); font-size: 13px; min-height: 5.5em; overflow-wrap: anywhere; }
+.inspect .law { font-size: 15px; color: var(--ink); display: block; margin-block: 4px; }
+.inspect .meta { color: var(--muted); }
+.search { display: flex; gap: 8px; }
+.search input { flex: 1; min-width: 0; font-family: var(--mono); font-size: 14px; padding: 6px 8px; border: 1px solid var(--rule);
+  border-radius: 3px; background: var(--paper); color: var(--ink); }
+.tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.tbl { overflow-x: auto; background: var(--sheet); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 16px; }
+.tbl h2 { font-family: var(--display); font-size: 15px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 8px; color: var(--muted); }
+table { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; white-space: normal; }
+th { font-family: var(--display); font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.bar { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--old); }
+.prose { max-width: 70ch; display: grid; gap: 12px; }
+.prose h2 { font-family: var(--display); font-weight: 600; font-size: 26px; margin: 8px 0 0; letter-spacing: 0.02em; }
+.prose p { margin: 0; }
+.prose code { font-family: var(--mono); font-size: 0.9em; }
+a { color: var(--old); }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Survey sheet · laws of one binary operation ◇</div>
+    <h1>Luotain</h1>
+    <p class="lede">Every dot is an equational law, or a class of laws that imply each other. Small multiplication tables are sent out as <em>probes</em>. A table that obeys law A and breaks law B proves, once and for all, that A does not imply B. What no probe and no prover settles is the residue, marked in amber.</p>
+  </header>
+
+  <section class="survey" aria-label="The map">
+    <div class="chart">
+      <canvas id="map" width="1200" height="900" aria-label="Map of equational laws laid out by how often small tables satisfy them"></canvas>
+      <div class="corner" id="corner">PCA of satisfaction rates on 3,330 three-element tables</div>
+      <div class="phases" role="group" aria-label="Replay">
+        <button id="ph1" aria-pressed="false">1 · Probes</button>
+        <button id="ph2" aria-pressed="false">2 · Five multiplications</button>
+        <button id="ph3" aria-pressed="false">3 · Sample edges</button>
+        <button id="phall" aria-pressed="true">Whole map</button>
+        <span class="scale" id="scale"></span>
+      </div>
+    </div>
+
+    <div class="rail">
+      <div class="panel" aria-live="polite">
+        <h2 id="stat-title">False edges killed by probes</h2>
+        <div class="big" id="stat-big">–</div>
+        <p class="note" id="stat-note"></p>
+      </div>
+      <div class="panel">
+        <h2>Layers</h2>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="panel">
+        <h2>Inspector</h2>
+        <div class="search">
+          <input id="find" inputmode="numeric" placeholder="Equation number, e.g. 4512" aria-label="Find an equation by number">
+        </div>
+        <div class="inspect" id="inspect"><span class="meta">Hover or tap a dot.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tables">
+    <div class="tbl">
+      <h2>Step 1 · Calibration on the published map</h2>
+      <table id="calib"><thead><tr><th>Probe family</th><th>Probes</th><th>New kills</th><th>Killed so far</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="tbl">
+      <h2>Step 2 · The 57,882 five-multiplication laws</h2>
+      <table id="layer"><thead><tr><th>Where each law landed</th><th>Laws</th></tr></thead><tbody></tbody></table>
+    </div>
+  </section>
+
+  <section class="prose">
+    <h2>How to read it</h2>
+    <p>Positions come from each law's satisfaction rate on every kind of 3-element table, flattened to two dimensions. Laws that behave alike on small tables sit close together. Blue dots are the 1,415 classes of the Equational Theories Project's finished map, sized by how many laws they hold; faint lines are its cover relations. Teal dots are classes that appear only with five multiplications: each is certified different from every older law by a probe. Violet marks the class of <code>x = y</code>, where laws with only one-element models collapse. It implies every law, and every law implies <code>x = x</code>, so lines to those two are left out; both are pinned to the edge of the chart.</p>
+    <p id="certs"></p>
+    <p>Built on the Equational Theories Project's data (Apache-2.0). The layout idea follows Berlioz and Melliès, <em>The latent space of equational theories</em> (2026). Code, data and Lean files: <a href="https://github.com/anttiluode/Luotain">github.com/anttiluode/Luotain</a>.</p>
+  </section>
+</div>
+
+<script>
+/*DATA*/
+</script>
+<script>
+(function () {
+  const D = window.LUOTAIN;
+  const cv = document.getElementById("map");
+  const ctx = cv.getContext("2d");
+  const fmt = (n) => n.toLocaleString("en-US");
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ------------------------------------------------------------------ geometry
+  const extreme = new Set([D.trivial_class, D.collapse_class]);
+  const pts = D.old.filter((p, i) => !extreme.has(i)).concat(D.new, D.residue || []);
+  let xmin = Infinity, xmax = -Infinity, ymin = Infinity, ymax = -Infinity;
+  for (const p of pts) { xmin = Math.min(xmin, p.x); xmax = Math.max(xmax, p.x); ymin = Math.min(ymin, p.y); ymax = Math.max(ymax, p.y); }
+  const pad = 40;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  function sx(x) { return clamp(pad + (x - xmin) / (xmax - xmin) * (cv.width - 2 * pad), 18, cv.width - 18); }
+  function sy(y) { return clamp(cv.height - pad - (y - ymin) / (ymax - ymin) * (cv.height - 2 * pad), 18, cv.height - 18); }
+  const rad = (n) => 1.8 + 3.4 * Math.log10(1 + n);
+  const oldR = D.old.map((c) => rad(c.n));
+  const joinR = D.old.map((c) => rad(c.n + c.joined));
+
+  // ------------------------------------------------------------------ state
+  const show = { edges: true, old: true, new: true, residue: true, sample: true };
+  let phase = "all", t = 1;            // t in [0,1] within the phase animation
+  let hover = null, pinned = null;
+
+  function draw() {
+    const c = { old: css("--old"), nw: css("--new"), col: css("--collapse"), res: css("--residue"), edge: css("--edge"), ink: css("--ink") };
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    const phase2 = phase === "2" ? t : (phase === "3" || phase === "all") ? 1 : 0;
+    const phase3 = phase === "3" ? t : phase === "all" ? 1 : 0;
+    if (show.edges) {
+      ctx.strokeStyle = c.edge; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (const [a, b] of D.hasse) {
+        if (extreme.has(a) || extreme.has(b)) continue;
+        const p = D.old[a], q = D.old[b]; ctx.moveTo(sx(p.x), sy(p.y)); ctx.lineTo(sx(q.x), sy(q.y));
+      }
+      ctx.stroke();
+    }
+    if (show.old) {
+      ctx.fillStyle = c.old; ctx.globalAlpha = 0.72;
+      D.old.forEach((p, i) => {
+        if (i === D.collapse_class) return;
+        const r = oldR[i] + (joinR[i] - oldR[i]) * phase2;
+        ctx.beginPath(); ctx.arc(sx(p.x), sy(p.y), r, 0, 6.2832); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+      const e2 = D.old[D.collapse_class];
+      const r2 = oldR[D.collapse_class] + (joinR[D.collapse_class] - oldR[D.collapse_class]) * phase2;
+      ctx.fillStyle = c.col; ctx.globalAlpha = 0.85;
+      ctx.beginPath(); ctx.arc(sx(e2.x), sy(e2.y), r2, 0, 6.2832); ctx.fill(); ctx.globalAlpha = 1;
+    }
+    if (show.new) {
+      const k = Math.floor(D.new.length * phase2);
+      ctx.fillStyle = c.nw; ctx.globalAlpha = 0.8;
+      for (let i = 0; i < k; i++) { const p = D.new[i]; ctx.fillRect(sx(p.x) - 1.3, sy(p.y) - 1.3, 2.6, 2.6); }
+      ctx.globalAlpha = 1;
+    }
+    if (show.residue && D.residue) {
+      const k = Math.floor(D.residue.length * phase2);
+      ctx.strokeStyle = c.res; ctx.lineWidth = 1.4;
+      for (let i = 0; i < k; i++) { const p = D.residue[i]; ctx.beginPath(); ctx.arc(sx(p.x), sy(p.y), 3.2, 0, 6.2832); ctx.stroke(); }
+    }
+    if (show.sample && phase3 > 0) {
+      const k = Math.floor(D.sample.length * phase3);
+      ctx.lineWidth = 1.1;
+      for (let i = 0; i < k; i++) {
+        const s = D.sample[i]; const p = D.new_by_eq[s.eq]; if (!p) continue;
+        ctx.strokeStyle = c.nw; ctx.globalAlpha = 0.55;
+        for (const a of s.parents) { if (extreme.has(a)) continue; const q = D.old[a]; ctx.beginPath(); ctx.moveTo(sx(p.x), sy(p.y)); ctx.lineTo(sx(q.x), sy(q.y)); ctx.stroke(); }
+        ctx.strokeStyle = c.col;
+        for (const a of s.children) { if (extreme.has(a)) continue; const q = D.old[a]; ctx.beginPath(); ctx.moveTo(sx(p.x), sy(p.y)); ctx.lineTo(sx(q.x), sy(q.y)); ctx.stroke(); }
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = c.nw; ctx.beginPath(); ctx.arc(sx(p.x), sy(p.y), 3.4, 0, 6.2832); ctx.fill();
+      }
+    }
+    const h = pinned || hover;
+    if (h) {
+      ctx.strokeStyle = c.ink; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(sx(h.p.x), sy(h.p.y), (h.kind === "old" ? oldR[h.i] : 3) + 4, 0, 6.2832); ctx.stroke();
+    }
+  }
+
+  // ------------------------------------------------------------------ stats
+  const big = document.getElementById("stat-big"), title = document.getElementById("stat-title"), note = document.getElementById("stat-note");
+  const cal = D.calibration, fam = cal.families;
+  function stats() {
+    if (phase === "1") {
+      const f = Math.min(fam.length - 1, Math.floor(t * fam.length));
+      const prev = f ? fam[f - 1].cumulative_kills : 0;
+      const val = Math.round(prev + (fam[f].cumulative_kills - prev) * ((t * fam.length) - f));
+      title.textContent = "False edges killed by probes";
+      big.innerHTML = fmt(Math.min(val, cal.killed)) + " <small>of " + fmt(cal.false_edges) + "</small>";
+      note.textContent = "Adding: " + fam[f].family + ".";
+    } else if (phase === "2") {
+      const n = D.summary.new_laws;
+      title.textContent = "Five-multiplication laws placed";
+      big.innerHTML = fmt(Math.round(n * t)) + " <small>of " + fmt(n) + "</small>";
+      note.textContent = "Collapsing to x = y, joining an old class, or opening a new one.";
+    } else if (phase === "3") {
+      title.textContent = "Sample of new laws, every edge decided";
+      big.innerHTML = fmt(Math.round(D.sample.length * t)) + " <small>laws</small>";
+      note.textContent = "Teal lines go to the strongest old classes each one implies; violet lines come from the weakest classes that imply it.";
+    } else {
+      title.textContent = "False edges killed by probes";
+      big.innerHTML = (100 * cal.killed_fraction).toFixed(2) + "<small>%</small>";
+      note.textContent = fmt(cal.killed) + " of " + fmt(cal.false_edges) + " false implications in the published map, with zero kills on its " + fmt(cal.true_edges) + " true ones. " + fmt(cal.residue_edges) + " remain for smarter models.";
+    }
+  }
+
+  // ------------------------------------------------------------------ animation
+  let raf = 0, start = 0;
+  const DUR = { "1": 5200, "2": 6500, "3": 4200 };
+  function run(p) {
+    phase = p;
+    for (const b of ["ph1", "ph2", "ph3", "phall"]) document.getElementById(b).setAttribute("aria-pressed", String(b === (p === "all" ? "phall" : "ph" + p)));
+    cancelAnimationFrame(raf);
+    if (p === "all" || reduce) { t = 1; stats(); draw(); return; }
+    start = performance.now();
+    const step = (now) => { t = Math.min(1, (now - start) / DUR[p]); stats(); draw(); if (t < 1) raf = requestAnimationFrame(step); };
+    raf = requestAnimationFrame(step);
+  }
+  document.getElementById("ph1").onclick = () => run("1");
+  document.getElementById("ph2").onclick = () => run("2");
+  document.getElementById("ph3").onclick = () => run("3");
+  document.getElementById("phall").onclick = () => run("all");
+
+  // ------------------------------------------------------------------ layers
+  const chips = document.getElementById("chips");
+  const layers = [["old", "--old", "old classes"], ["edges", "--edge", "cover lines"], ["new", "--new", "new classes"],
+                  ["residue", "--residue", "residue"], ["sample", "--collapse", "sample edges"]];
+  for (const [key, col, label] of layers) {
+    const b = document.createElement("button");
+    b.setAttribute("aria-pressed", "true"); b.id = "layer-" + key;
+    b.innerHTML = '<span class="dot" style="background:var(' + col + ')"></span>' + label;
+    b.onclick = () => { show[key] = !show[key]; b.setAttribute("aria-pressed", String(show[key])); draw(); };
+    chips.appendChild(b);
+  }
+
+  // ------------------------------------------------------------------ inspector
+  D.new_by_eq = {}; for (const p of D.new) D.new_by_eq[p.eq] = p;
+  const cands = [];
+  D.old.forEach((p, i) => cands.push({ p, i, kind: "old" }));
+  D.new.forEach((p, i) => cands.push({ p, i, kind: "new" }));
+  (D.residue || []).forEach((p, i) => cands.push({ p, i, kind: "residue" }));
+  const byEq = {}; for (const c of cands) byEq[c.p.eq] = c;
+  const inspect = document.getElementById("inspect");
+  function describe(h) {
+    if (!h) { inspect.innerHTML = '<span class="meta">Hover or tap a dot.</span>'; return; }
+    const p = h.p; const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    let meta;
+    if (h.kind === "old") {
+      meta = (h.i === D.collapse_class ? "The class of x = y. " : "") + "Class of " + fmt(p.n) + " law" + (p.n > 1 ? "s" : "") + " with at most four multiplications" +
+        (p.joined ? ", joined by " + fmt(p.joined) + " five-multiplication law" + (p.joined > 1 ? "s" : "") : "") + ".";
+    } else if (h.kind === "new") {
+      const s = D.sample.find((q) => q.eq === p.eq);
+      meta = "New with five multiplications: a probe separates it from every older law." +
+        (s ? " Implies " + fmt(s.implies) + " old classes, implied by " + fmt(s.implied_by) + ", " + fmt(s.open) + " edges open." : "");
+    } else {
+      meta = "Residue: the probes and Vampire could not settle where this law belongs.";
+    }
+    inspect.innerHTML = '<span class="meta">Equation ' + fmt(p.eq) + '</span><span class="law">' + esc(p.law) + '</span><span class="meta">' + meta + "</span>";
+  }
+  function nearest(ev) {
+    const r = cv.getBoundingClientRect();
+    const x = (ev.clientX - r.left) * cv.width / r.width, y = (ev.clientY - r.top) * cv.height / r.height;
+    let best = null, bd = 14 * cv.width / r.width;
+    for (const c of cands) {
+      if ((c.kind === "old" && !show.old) || (c.kind === "new" && !show.new) || (c.kind === "residue" && !show.residue)) continue;
+      const d = Math.hypot(sx(c.p.x) - x, sy(c.p.y) - y) - (c.kind === "old" ? oldR[c.i] : 0);
+      if (d < bd) { bd = d; best = c; }
+    }
+    return best;
+  }
+  cv.addEventListener("mousemove", (ev) => { hover = nearest(ev); if (!pinned) describe(hover); draw(); });
+  cv.addEventListener("mouseleave", () => { hover = null; if (!pinned) describe(null); draw(); });
+  cv.addEventListener("click", (ev) => { const n = nearest(ev); pinned = n && pinned && n.p.eq === pinned.p.eq ? null : n; describe(pinned); draw(); });
+  document.getElementById("find").addEventListener("input", (ev) => {
+    const n = parseInt(ev.target.value, 10); const c = byEq[n];
+    if (c) { pinned = c; describe(c); draw(); }
+    else if (ev.target.value.trim()) {
+      const code = D.status_str && n >= 1 && n <= D.status_str.length ? D.status_str[n - 1] : null;
+      inspect.innerHTML = '<span class="meta">' + (code ? "Equation " + fmt(n) + ": " + D.status_names[code] + ". Its class is drawn under its lowest-numbered member." : "Equations run from 1 to 62,576.") + "</span>";
+    }
+  });
+
+  // ------------------------------------------------------------------ tables
+  const tb = document.querySelector("#calib tbody");
+  for (const f of fam) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + f.family + '<div class="bar"><i style="width:' + (100 * f.cumulative_kills / cal.false_edges).toFixed(2) + '%"></i></div></td><td>' + fmt(f.probes) + "</td><td>" + fmt(f.new_kills) + "</td><td>" + (100 * f.cumulative_kills / cal.false_edges).toFixed(2) + "%</td>";
+    tb.appendChild(tr);
+  }
+  const tr0 = document.createElement("tr");
+  tr0.innerHTML = "<td>Residue: false, but no probe here shows it</td><td></td><td></td><td>" + fmt(cal.residue_edges) + "</td>";
+  tb.appendChild(tr0);
+  const lb = document.querySelector("#layer tbody");
+  for (const [label, n] of D.layer_rows) {
+    const tr = document.createElement("tr"); tr.innerHTML = "<td>" + label + "</td><td>" + fmt(n) + "</td>"; lb.appendChild(tr);
+  }
+  document.getElementById("certs").textContent = D.certs_text;
+  document.getElementById("scale").textContent = fmt(D.old.length) + " old classes · " + fmt(D.new.length) + " new classes drawn";
+
+  stats(); draw();
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>

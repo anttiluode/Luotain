@@ -1,0 +1,16 @@
+{
+ "codes": {
+  "0": "implicit_proof_true",
+  "1": "explicit_proof_false",
+  "2": "implicit_proof_false",
+  "3": "explicit_proof_true",
+  "4": "explicit_conjecture_false",
+  "5": "implicit_conjecture_false",
+  "6": "unknown"
+ },
+ "source": "teorth/equational_theories data/2024-11-10-outcomes.json.zip",
+ "shape": [
+  4694,
+  4694
+ ]
+}

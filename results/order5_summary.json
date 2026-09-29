@@ -1,0 +1,36 @@
+{
+ "new_laws": 57882,
+ "status": {
+  "collapse": 19385,
+  "joins": 17536,
+  "new": 15858,
+  "new_by_vampire": 3825,
+  "residue": 1278
+ },
+ "labels": {
+  "collapse": "Collapse to x = y (Vampire proof; no probe obeys them)",
+  "joins": "Equivalent to an older law (Vampire proofs both ways)",
+  "new": "New class: a probe separates it from every older law",
+  "new_by_vampire": "New class: fingerprint twins of old classes, all refuted by Vampire",
+  "residue": "Residue: not settled within the time limits",
+  "pending": "Not yet processed"
+ },
+ "new_classes_lower_bound": 9086,
+ "new_classes_lower_bound_note": "new laws with different fingerprints cannot be equivalent, so the number of distinct fingerprints among new-class laws is a lower bound",
+ "old_classes_that_gained_members": 446,
+ "etp_check": {
+  "etp_collapse": 19392,
+  "ours": 19385,
+  "ours_not_etp": 0,
+  "etp_not_ours": 7,
+  "etp_not_ours_status": {
+   "residue": 7
+  }
+ },
+ "vampire_limits": "first pass 0.5-2 s per question; second look: finite-model search 0.3 s each way, then proof attempts 0.6 s each way",
+ "etp_blueprint_for_comparison": {
+  "collapse (only trivial models)": 19392,
+  "only trivial finite models": 106,
+  "unknown whether nontrivial finite models": 24
+ }
+}

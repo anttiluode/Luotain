@@ -1,0 +1,62 @@
+{
+ "source": "ETP outcome matrix, snapshot 2024-11-10 (4 unknown + 186 conjectured pairs, all later settled false)",
+ "laws": 4694,
+ "classes": 1415,
+ "true_edges": 8173585,
+ "false_edges": 13855357,
+ "families": [
+  {
+   "family": "all 2-element tables",
+   "probes": 10,
+   "distinct_responses": 10,
+   "kills_alone": 12560783,
+   "new_kills": 12560783,
+   "cumulative_kills": 12560783,
+   "kills_on_true_edges": 0
+  },
+  {
+   "family": "all 3-element tables",
+   "probes": 3330,
+   "distinct_responses": 2639,
+   "kills_alone": 13338841,
+   "new_kills": 1035338,
+   "cumulative_kills": 13596121,
+   "kills_on_true_edges": 0
+  },
+  {
+   "family": "affine x\u25c7y = ax+by+c mod n, n <= 12",
+   "probes": 6083,
+   "distinct_responses": 502,
+   "kills_alone": 13351195,
+   "new_kills": 193530,
+   "cumulative_kills": 13789651,
+   "kills_on_true_edges": 0
+  },
+  {
+   "family": "2,000 random 4-element tables",
+   "probes": 2000,
+   "distinct_responses": 511,
+   "kills_alone": 1366604,
+   "new_kills": 30,
+   "cumulative_kills": 13789681,
+   "kills_on_true_edges": 0
+  }
+ ],
+ "killed": 13789681,
+ "killed_fraction": 0.9952598839567973,
+ "residue_edges": 65676,
+ "residue_by_published_code": {
+  "explicit_proof_false": 4846,
+  "implicit_proof_false": 60640,
+  "explicit_conjecture_false": 61,
+  "implicit_conjecture_false": 125,
+  "unknown": 4
+ },
+ "class_level": {
+  "false_class_pairs": 1972368,
+  "residue_class_pairs": 20163
+ },
+ "unknown_in_snapshot_killed": 0,
+ "conjectured_in_snapshot_killed": 0,
+ "seconds": 51
+}

@@ -1,0 +1,14 @@
+The files in this directory come from the Equational Theories Project,
+https://github.com/teorth/equational_theories, licensed under the Apache License 2.0
+(see LICENSE-ETP):
+
+  eq_size5.txt                data/eq_size5.txt, unchanged (Equations 1..62576)
+  order5_collapse_ids.txt     the 19,392 five-multiplication laws proved in Lean to collapse to x = y
+                              (theorems EquationN_implies_Equation2 in equational_theories/Generated/
+                              Order5/Eq2Proof*.lean, branch order5 of github.com/vlad902/equational_theories)
+  outcomes_2024-11-10.npz     data/2024-11-10-outcomes.json.zip, re-encoded as a uint8
+                              matrix; code meanings in outcomes_meta.json
+
+The outcome snapshot of 2024-11-10 lists 4 pairs as unknown and 186 as conjectured false.
+The project's final count of true implications equals this snapshot's, so all 190 were
+later settled as false; Luotain treats them as false and says so where it matters.
