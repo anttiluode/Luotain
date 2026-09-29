@@ -7,7 +7,7 @@ A law here is an equation about one binary operation ◇, such as `x ◇ (y ◇ 
 1. **Calibrates** how far pure probing gets on it, against the published answers.
 2. **Extends** it to the 57,882 laws with five multiplications, which nobody has placed on the map. For each new law it decides whether the law is equivalent to an older one or opens a new class, and for a sample of new laws it decides every edge to the old map.
 
-**The map:** [anttiluode.github.io/luotain](https://anttiluode.github.io/luotain/), one page built from `site/index.html`.
+**The map:** [anttiluode.github.io/Luotain](https://anttiluode.github.io/Luotain/), one page built from `site/index.html`.
 
 Every claim carries a certificate that can be checked without trusting this code: a table (for "A does not imply B") or a Vampire proof (for "A implies B"). Lean's kernel re-checks a random sample of both.
 
