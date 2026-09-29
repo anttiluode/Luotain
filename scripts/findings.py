@@ -42,7 +42,7 @@ def main():
         "calibration_residue_most_frequent_source_laws": [
             {"equation": int(e), "law": laws[int(e) - 1].text, "residue_edges_from_it": n} for e, n in hardest],
     }
-    (ROOT / "results" / "findings.json").write_text(json.dumps(findings, indent=1, ensure_ascii=False))
+    (ROOT / "results" / "findings.json").write_text(json.dumps(findings, indent=1, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(findings, indent=1, ensure_ascii=False))
 
 

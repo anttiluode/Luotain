@@ -118,7 +118,7 @@ def build(mod: Module, laws: list[Law]) -> dict:
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f"{mod.name}.lean"
     src = mod.source()
-    path.write_text(src)
+    path.write_text(src, encoding="utf-8")
     bad = failing_theorems(src, check(path))
     replayed = 0
     if bad:
@@ -133,12 +133,12 @@ def build(mod: Module, laws: list[Law]) -> dict:
             new.append((nm, kind, s))
         mod.thms = new
         src = mod.source()
-        path.write_text(src)
+        path.write_text(src, encoding="utf-8")
         bad = failing_theorems(src, check(path))
     keep = {nm for nm, _, _ in mod.thms} - bad
     for _ in range(5):                                   # drop whatever still fails, until clean
         src = mod.source(keep)
-        path.write_text(src)
+        path.write_text(src, encoding="utf-8")
         still = failing_theorems(src, check(path))
         if not still:
             break
@@ -172,7 +172,7 @@ def main():
             break
     report.append(build(mod, laws))
 
-    recs = [json.loads(l) for l in (ROOT / "cache" / "place.jsonl").read_text().splitlines() if l.strip()]
+    recs = [json.loads(l) for l in (ROOT / "results" / "place_log.jsonl").read_text().splitlines() if l.strip()]
     # 2. collapse: order-5 laws that force x = y
     mod = Module("Collapse", laws)
     col = [r["id"] for r in recs if r["status"] == "collapse"]

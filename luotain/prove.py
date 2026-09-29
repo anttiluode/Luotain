@@ -4,7 +4,8 @@ Vampire answers 'Theorem' (the implication holds, with a proof), 'CounterSatisfi
 (it found a model where it fails) or runs out of time.  Probes kill most false
 implications before Vampire is asked; Vampire is spent on what the probes leave.
 
-Set LUOTAIN_VAMPIRE to the binary, or put it at tools/vampire (scripts/get_tools.sh).
+Set LUOTAIN_VAMPIRE to the binary, or put it in tools/ (scripts/get_tools.sh on Linux,
+run_overnight.bat on Windows, which fetches vampire.exe).
 """
 from __future__ import annotations
 
@@ -16,9 +17,17 @@ from pathlib import Path
 from .laws import Law, tptp_problem
 
 ROOT = Path(__file__).resolve().parent.parent
-VAMPIRE = os.environ.get("LUOTAIN_VAMPIRE", str(ROOT / "tools" / "vampire"))
+_DEFAULT = ROOT / "tools" / ("vampire.exe" if os.name == "nt" else "vampire")
+VAMPIRE = os.environ.get("LUOTAIN_VAMPIRE", str(_DEFAULT))
 
 PROVED, REFUTED, UNKNOWN = "proved", "refuted", "unknown"
+
+
+def require_vampire():
+    """Stop with a clear message instead of reporting every question as 'unknown'."""
+    if not Path(VAMPIRE).exists():
+        raise SystemExit(f"Vampire not found at {VAMPIRE}. Run scripts/get_tools.sh (Linux) or "
+                         f"run_overnight.bat (Windows), or set LUOTAIN_VAMPIRE.")
 
 
 def vampire(hyp: Law, goal: Law, seconds: float = 5.0, mode: str = "casc",

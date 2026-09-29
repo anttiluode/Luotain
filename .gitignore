@@ -1,5 +1,5 @@
 cache/
-tools/vampire
+tools/
 lean/.lake/
 __pycache__/
 *.pyc

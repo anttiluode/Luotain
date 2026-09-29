@@ -127,16 +127,20 @@ Not shown:
 pip install -r requirements.txt pytest
 sh scripts/get_tools.sh                  # downloads the Vampire prover into tools/
 python -m pytest -q tests                # evaluator and published-map checks (~30 s)
-python scripts/fingerprints.py           # every law against every probe (~15 min)
+python scripts/fingerprints.py           # every law against every probe (~15 min; results are committed)
 python scripts/calibrate.py              # step 1 -> results/calibration.json
 python scripts/place.py                  # step 2, resumable (~45 min on 2 cores)
-python scripts/place.py --retry          # second look at what is left
+python scripts/place.py --retry          # another look at what is left; repeat with larger --seconds
 python scripts/place.py --report         # -> results/order5_layer.tsv, order5_summary.json
 python scripts/edges.py --sample 60      # step 3 -> results/sample_edges.jsonl
 python scripts/lean_certs.py             # step 4 -> lean/Luotain/*.lean, checked on the spot
 python scripts/build_map.py              # the map -> site/index.html
 cd lean && lake build                    # Lean's kernel checks every certificate
 ```
+
+Every Vampire verdict is kept in `results/place_log.jsonl`, one record per law per pass, so later passes only look at what is still unsettled.
+
+**Overnight on Windows:** double-click `run_overnight.bat`. It fetches `vampire.exe`, gives every unsettled law another look with 30-second finite-model searches and 60-second proof attempts for up to ten hours (both set at the top of the file), then refreshes `results/`, this README and the map. It commits nothing.
 
 ## Layout
 
@@ -147,8 +151,10 @@ luotain/kill.py        kill matrices, the published map, classes, cover edges
 luotain/prove.py       Vampire wrapper
 luotain/lean_emit.py   Lean certificates: tables checked by decide, proofs by grind
 scripts/               the steps above, in order
+run_overnight.bat      the long retry on Windows
 data/etp/              the ETP's equation list (order <= 5) and outcome matrix, Apache-2.0
-results/               everything measured, as JSON/TSV
+data/fingerprints/     every law's response to every probe (packed bits, regenerable)
+results/               everything measured, as JSON/TSV; place_log.jsonl holds every Vampire verdict
 lean/                  the Lean certificates (core Lean 4.30, no Mathlib)
 site/index.html        the map, one self-contained page
 tests/                 evaluator against brute force, parser round trip, published-map checks

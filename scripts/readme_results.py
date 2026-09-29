@@ -22,7 +22,7 @@ def section() -> str:
     lay = json.loads((ROOT / "results" / "order5_summary.json").read_text())
     se = [json.loads(l) for l in (ROOT / "results" / "sample_edges.jsonl").read_text().splitlines() if l.strip()]
     lean = json.loads((ROOT / "results" / "lean_certificates.json").read_text())
-    fnd = json.loads((ROOT / "results" / "findings.json").read_text())
+    fnd = json.loads((ROOT / "results" / "findings.json").read_text(encoding="utf-8"))
     out = []
     w = out.append
 
